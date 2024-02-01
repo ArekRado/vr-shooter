@@ -1,0 +1,34 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "plugins": [
+    "@typescript-eslint",
+    // "prettier",
+    "react"
+  ],
+  "extends": [
+    "plugin:react/recommended",
+    "plugin:react/typescript",
+    // "plugin:prettier/recommended",
+    // "prettier",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking"
+  ],
+  "parserOptions": {
+    "project": ["./tsconfig.json"] // Specify it only for TypeScript files
+  },
+  "rules": {
+    "@typescript-eslint/no-namespace": 0,
+    "@typescript-eslint/no-floating-promises": 0,
+    "@typescript-eslint/no-unused-variable": 0,
+    "@typescript-eslint/no-explicit-any": 0,
+    "@typescript-eslint/no-unsafe-argument": 0,
+    "@typescript-eslint/no-unsafe-member-access": 0,
+    "@typescript-eslint/no-unsafe-assignment": 0
+    //   "prettier/prettier": 2,
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
+  "ignorePatterns": ["src/**/*.js"]
+}

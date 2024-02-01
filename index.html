@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en" data-bs-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <link rel="canonical" href="https://arekrado.github.io/pixel-strategy/" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <link rel="icon" href="/icon.png" />
+    <title>Pixel strategy</title>
+
+    <script>
+      // turn off react devtools message
+      // https://github.com/facebook/react/issues/24283#issuecomment-1552160985
+      try {
+        console.info = new Proxy(console.info, {
+          apply: (target, thisArg, args) => {
+            if (args?.[0]?.includes?.('React DevTools')) return
+            return Reflect.apply(target, thisArg, args)
+          },
+        })
+      } catch {}
+    </script>
+
+    <style>
+      @font-face {
+        font-family: Lato-Regular;
+        src: url(/fonts/Lato-Regular.ttf);
+      }
+
+      html {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+
+      body {
+        background: black;
+        margin: 0;
+
+        width: 100%;
+        height: 100%;
+
+        display: flex;
+        overflow: hidden;
+
+        touch-action: none;
+      }
+
+      #game {
+        flex: 1;
+        height: 100%;
+        width: 100%;
+        z-index: 1;
+      }
+
+      #ui {
+        display: flex;
+        flex: 1;
+
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+
+        z-index: 2;
+        /* pointer-events: none; */
+      }
+
+      /* #inspector-host {
+			position: absolute !important;
+			z-index: 2;
+		}
+
+		#scene-explorer-host {
+			position: absolute !important;
+			z-index: 1;
+			z-index: 2;
+		} */
+
+      * {
+        -webkit-tap-highlight-color: transparent;
+        scrollbar-width: thin;
+      }
+
+      #loader {
+        background-color: black;
+        z-index: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+      }
+
+      #loader div {
+        box-sizing: border-box;
+        display: block;
+        position: absolute;
+        width: 64px;
+        height: 64px;
+        margin: 8px;
+        border: 8px solid #fff;
+        border-radius: 50%;
+        animation: loader 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+        border-color: #fff transparent transparent transparent;
+      }
+
+      #loader div:nth-child(1) {
+        animation-delay: -0.45s;
+      }
+
+      #loader div:nth-child(2) {
+        animation-delay: -0.3s;
+      }
+
+      #loader div:nth-child(3) {
+        animation-delay: -0.15s;
+      }
+
+      @keyframes loader {
+        0% {
+          transform: rotate(0deg);
+        }
+
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- <div id="ui"></div> -->
+    <!-- <div id="devtools"></div> -->
+    <div id="loader">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+
+    <canvas id="game"></canvas>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
