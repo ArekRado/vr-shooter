@@ -9,6 +9,8 @@ export enum gameComponent {
   // Game
 
   player = 'player',
+  enemy = 'enemy',
+  gunPointer = 'gunPointer',
 
   health = 'health',
   position = 'positions',
@@ -26,7 +28,8 @@ export enum gameComponent {
   mesh = 'mesh',
 }
 
-export enum Player {}
+export type Player = {}
+export type Enemy = {}
 
 // game components
 export type Health = { maxHealth: number; health: number }
@@ -60,6 +63,7 @@ export type Grid = {
 }
 
 export type UnitMovingPath = {}
+export type GunPointer = {}
 
 export type TerrainEditorBrush = {}
 export type MapControls = {}
@@ -109,11 +113,13 @@ export type MeshType = {
 
 type Components = {
   [gameComponent.player]: Map<Entity, Player>
+  [gameComponent.enemy]: Map<Entity, Enemy>
   [gameComponent.health]: Map<Entity, Health>
   [gameComponent.position]: Map<Entity, Position>
   [gameComponent.map]: Map<Entity, GameMap>
   [gameComponent.grid]: Map<Entity, Grid>
   [gameComponent.unitMovingPath]: Map<Entity, UnitMovingPath>
+  [gameComponent.gunPointer]: Map<Entity, GunPointer>
 
   // [gameComponent.syncUI]: Map<Entity, GameState>
   [gameComponent.testingUtils]: Map<Entity, TestingUtils>

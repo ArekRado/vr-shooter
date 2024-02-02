@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en" data-bs-theme="dark">
   <head>
     <meta charset="UTF-8" />
@@ -70,7 +70,19 @@
         width: 100%;
 
         z-index: 2;
-        /* pointer-events: none; */
+        pointer-events: none;
+      }
+
+      #gunPointer {
+        border: 1px solid white;
+        border-radius: 100%;
+        width: 4px;
+        height: 4px;
+        z-index: 2;
+
+        top: 50%;
+        left: 50%;
+        position: absolute;
       }
 
       /* #inspector-host {
@@ -147,6 +159,7 @@
       <div></div>
     </div>
 
+    <div id="gunPointer"></div>
     <canvas id="game"></canvas>
     <script type="module" src="/src/main.ts"></script>
   </body>

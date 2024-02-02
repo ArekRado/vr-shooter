@@ -12,7 +12,7 @@ import { getStore } from '../../utils/store'
 import { getStandardMaterial } from '../standardMaterial/standardMaterial.crud'
 
 const crud = createComponentCrud<MeshType>({
-getStore,
+  getStore,
   name: gameComponent.mesh,
 })
 
@@ -46,6 +46,8 @@ export const meshSystem = () => {
         alignVertical: Mesh.TOP,
         alignHorizontal: Mesh.LEFT,
       })
+
+      component.ref.metadata = { entity }
 
       const standardMaterial = getStandardMaterial(entity)
 
