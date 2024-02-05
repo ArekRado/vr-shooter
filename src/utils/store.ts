@@ -26,6 +26,9 @@ const setStore = () => {
 
     [gameComponent.standardMaterial]: new Map(),
     [gameComponent.mesh]: new Map(),
+    [gameComponent.physicsShape]: new Map(),
+    [gameComponent.physicsBody]: new Map(),
+    [gameComponent.transformNode]: new Map(),
   })
 
   return store

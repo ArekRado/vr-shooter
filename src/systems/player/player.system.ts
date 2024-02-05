@@ -6,6 +6,7 @@ import {
 } from '../../utils/pointerEvents'
 import { getStore } from '../../utils/store'
 import { getEnemy, removeEnemy } from '../enemy/ememy.crud'
+import { killEnemy } from '../enemy/killEnemy'
 
 export const playerSystem = () => {
   getStore().addEventHandler<OnPointerDownEvent>('OnPointerDown', (event) => {
@@ -36,7 +37,7 @@ export const playerSystem = () => {
 
     if (hit?.hit) {
       const enemyEntity = hit.pickedMesh?.metadata.entity
-      removeEnemy(enemyEntity)
+      killEnemy(enemyEntity)
     }
   })
 

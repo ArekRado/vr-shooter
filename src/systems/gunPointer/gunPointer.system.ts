@@ -6,7 +6,6 @@ export const gunPointerSystem = () => {
     name: gameComponent.gunPointer,
     componentName: gameComponent.gunPointer,
     create: () => {
-      console.log('create')
       const gunPointer = document.getElementById('gunPointer')
       if (gunPointer) {
         gunPointer.style['display'] = 'absolute'

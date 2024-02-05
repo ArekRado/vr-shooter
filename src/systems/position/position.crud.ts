@@ -1,7 +1,7 @@
 import { Entity, createComponentCrud } from '@arekrado/canvas-engine'
 import { type Position, gameComponent } from '../../types'
-import { getMesh } from '../../babylonSystems/mesh/mesh.system'
 import { getStore } from '../../utils/store'
+import { getMesh } from '../../babylonSystems/mesh/mesh.crud'
 
 const crud = createComponentCrud<Position>({
 getStore,

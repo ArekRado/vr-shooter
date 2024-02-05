@@ -1,12 +1,15 @@
 import { Entity } from '@arekrado/canvas-engine'
 import { createEnemy } from './ememy.crud'
 import { Enemy, Health, Position } from '../../types'
-import { createMesh } from '../../babylonSystems/mesh/mesh.system'
 import { createPosition } from '../position/position.crud'
 import { createHealth } from '../health.crud'
-import { createStandardMaterial } from '../../babylonSystems/standardMaterial/standardMaterial.crud'
 
-import recruitUrl from '../../assets/units/recruit.png'
+import characterUrl from '../../assets/models/male_base_mesh.glb'
+import { createPhysicsBody } from '../../babylonSystems/physicsBody/physicsBody.crud'
+import { createPhysicsShape } from '../../babylonSystems/physicsShape/physicsShape.crud'
+import { PhysicsMotionType } from '@babylonjs/core'
+import { createMesh } from '../../babylonSystems/mesh/mesh.crud'
+import { createTransformNode } from '../../babylonSystems/transformNode/transformNode.crud'
 
 export const enemyBlueprint = ({
   entity,
@@ -19,19 +22,28 @@ export const enemyBlueprint = ({
   position: Position
   health?: Partial<Health>
 }) => {
-  createEnemy(entity, enemy ?? {})
-  createStandardMaterial(entity, {
-    ref: undefined,
-    diffuseTextureUrl: recruitUrl,
-  })
-  createMesh(entity, {
-    ref: undefined,
-    enableOnPickTrigger: true,
-    name: entity,
-  })
   createPosition(entity, position)
+  createTransformNode(entity, { position })
   createHealth(entity, {
     health: health?.health ?? 1,
     maxHealth: health?.maxHealth ?? 1,
   })
+
+  createMesh(entity, {
+    ref: undefined,
+    enableOnPickTrigger: true,
+    name: entity,
+    url: characterUrl,
+  })
+  createPhysicsBody(entity, {
+    physicsMotionType: PhysicsMotionType.DYNAMIC,
+    startsAsleep: true,
+  })
+  createPhysicsShape(entity, { type: 'ConvexHull' })
+
+  createEnemy(entity, enemy ?? {})
+  // createStandardMaterial(entity, {
+  //   ref: undefined,
+  //   diffuseTextureUrl: recruitUrl,
+  // })
 }

@@ -1,5 +1,10 @@
 import { EmptyState, Entity, System } from '@arekrado/canvas-engine'
-import { GroundMesh, Mesh, StandardMaterial } from '@babylonjs/core'
+import {
+  GroundMesh,
+  Mesh,
+  PhysicsMotionType,
+  StandardMaterial,
+} from '@babylonjs/core'
 import { Vector2D } from '@arekrado/vector-2d'
 
 // Utils
@@ -26,6 +31,9 @@ export enum gameComponent {
   // Babylon
   standardMaterial = 'standardMaterial',
   mesh = 'mesh',
+  physicsShape = 'physicsShape',
+  physicsBody = 'physicsBody',
+  transformNode = 'transformNode',
 }
 
 export type Player = {}
@@ -108,7 +116,25 @@ export type StandardMaterialType = {
 export type MeshType = {
   ref?: Mesh
   name: string
+  url: string
   enableOnPickTrigger?: boolean
+}
+
+export type PhysicsShape = {
+  type: 'ConvexHull' | 'Mesh'
+}
+
+export type PhysicsBody = {
+  physicsMotionType: PhysicsMotionType
+  startsAsleep: boolean
+}
+
+export type TransformNode = {
+  position: {
+    x: number
+    y: number
+    z: number
+  }
 }
 
 type Components = {
@@ -128,6 +154,9 @@ type Components = {
 
   [gameComponent.standardMaterial]: Map<Entity, StandardMaterial>
   [gameComponent.mesh]: Map<Entity, MeshType>
+  [gameComponent.physicsShape]: Map<Entity, PhysicsShape>
+  [gameComponent.physicsBody]: Map<Entity, PhysicsBody>
+  [gameComponent.transformNode]: Map<Entity, TransformNode>
 }
 
 type Systems = System<Components>

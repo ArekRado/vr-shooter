@@ -4,13 +4,14 @@ import {
   HemisphericLight,
   Scene,
   Vector3,
-  UniversalCamera,
-  Camera,
   ScenePerformancePriority,
   NullEngine,
   Logger,
   FreeCamera,
+  HavokPlugin,
 } from '@babylonjs/core'
+import HavokPhysics from '@babylonjs/havok'
+
 import { generateEntity, runOneFrame } from '@arekrado/canvas-engine'
 import { meshSystem } from './babylonSystems/mesh/mesh.system.ts'
 import { standardMaterialSystem } from './babylonSystems/standardMaterial/standardMaterial.system.ts'
@@ -31,6 +32,9 @@ import { enemySystem } from './systems/enemy/enemy.system.ts'
 import { enemyBlueprint } from './systems/enemy/enemy.blueprint.ts'
 import { gunPointerBlueprint } from './systems/gunPointer/gunPointer.blueprint.ts'
 import { gunPointerSystem } from './systems/gunPointer/gunPointer.system.ts'
+import { physicsShapeSystem } from './babylonSystems/physicsShape/physicsShape.system.ts'
+import { physicsBodySystem } from './babylonSystems/physicsBody/physicsBody.system.ts'
+import { transformNodeSystem } from './babylonSystems/transformNode/transformNode.system.ts'
 
 export const canvasId = 'game'
 
@@ -43,7 +47,7 @@ const injectInitialState = () => {
   getStore().createEntity(gunPointerEntity)
   gunPointerBlueprint({ entity: gunPointerEntity })
 
-  Array.from({ length: 20 }).forEach(() => {
+  Array.from({ length: 5 }).forEach(() => {
     const entity = generateEntity()
     getStore().createEntity(entity)
 
@@ -62,7 +66,7 @@ export let engine: Engine
 export let scene: Scene
 export let camera: FreeCamera
 
-const initializeBabylon = () => {
+const initializeBabylon = async () => {
   const canvas = document.getElementById(canvasId) as HTMLCanvasElement
 
   if (!canvas && !isTestEnabled) {
@@ -76,22 +80,27 @@ const initializeBabylon = () => {
 
   scene.performancePriority = ScenePerformancePriority.BackwardCompatible
 
+  const gravityVector = new Vector3(0, -9.81, 0)
+  const havokInstance = await HavokPhysics()
+  const physicsPlugin = new HavokPlugin(true, havokInstance)
+  scene.enablePhysics(gravityVector, physicsPlugin)
+
   setPointerEvents(scene)
 
   // if (!isTestEnabled) {
-  //   import('@babylonjs/inspector').then(({ Inspector }) => {
-  //     Inspector.Show(scene, {
-  //       embedMode: true,
-  //     })
-  //   })
+  import('@babylonjs/inspector').then(({ Inspector }) => {
+    Inspector.Show(scene, {
+      embedMode: true,
+    })
+  })
   // }
-  scene.gravity = new Vector3(0, -0.9, 0)
-  scene.collisionsEnabled = true
+  // scene.gravity = new Vector3(0, -0.9, 0)
+  // scene.collisionsEnabled = true
 
   camera = new FreeCamera('FreeCamera', new Vector3(8, 8, 16), scene)
 
   camera.attachControl(canvas, false)
-  scene.collisionsEnabled = true
+  // scene.collisionsEnabled = true
   camera.checkCollisions = true
   camera.applyGravity = true
   camera.ellipsoid = new Vector3(1, 1, 1)
@@ -122,6 +131,9 @@ const initializeState = async (): Promise<void> => {
 
   meshSystem()
   standardMaterialSystem()
+  transformNodeSystem()
+  physicsBodySystem()
+  physicsShapeSystem()
 
   gridSystem()
 
@@ -139,11 +151,12 @@ const initializeState = async (): Promise<void> => {
 
   playerSystem()
   enemySystem()
+
   gunPointerSystem()
 }
 
 export const initializeGame = async () => {
-  initializeBabylon()
+  await initializeBabylon()
   await initializeState()
 
   document.getElementById('loader')?.remove()

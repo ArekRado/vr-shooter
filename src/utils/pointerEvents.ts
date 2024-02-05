@@ -6,6 +6,7 @@ import {
 } from '@babylonjs/core'
 import { ECSEvent } from '@arekrado/canvas-engine'
 import { getStore } from './store'
+import { engine } from '../main'
 
 export type OnPointerMoveEvent = ECSEvent<
   'OnPointerMove',
@@ -38,6 +39,10 @@ export const setPointerEvents = (scene: Scene) => {
         break
 
       case PointerEventTypes.POINTERDOWN:
+        if (!engine.isPointerLock) {
+          engine.enterPointerlock()
+        }
+
         getStore().emitEvent<OnPointerDownEvent>({
           type: 'OnPointerDown',
           payload: {

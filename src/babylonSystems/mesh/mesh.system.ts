@@ -7,19 +7,14 @@ import {
   ExecuteCodeAction,
   Mesh,
   MeshBuilder,
+  SceneLoader,
+  TransformNode,
 } from '@babylonjs/core'
 import { getStore } from '../../utils/store'
 import { getStandardMaterial } from '../standardMaterial/standardMaterial.crud'
 
-const crud = createComponentCrud<MeshType>({
-  getStore,
-  name: gameComponent.mesh,
-})
-
-export const getMesh = crud.getComponent
-export const createMesh = crud.createComponent
-export const updateMesh = crud.updateComponent
-export const removeMesh = crud.removeComponent
+import '@babylonjs/loaders/glTF'
+import { getPosition } from '../../systems/position/position.crud'
 
 export enum MeshEventType {
   OnPickTrigger = 'OnPickTrigger',
@@ -40,39 +35,45 @@ export const meshSystem = () => {
     name: gameComponent.mesh,
     componentName: gameComponent.mesh,
     create: ({ entity, component }) => {
-      component.ref = MeshBuilder.CreateTiledBox(component.name ?? entity, {
-        sideOrientation: Mesh.DOUBLESIDE,
-        pattern: Mesh.FLIP_TILE,
-        alignVertical: Mesh.TOP,
-        alignHorizontal: Mesh.LEFT,
+      const transformNode = new TransformNode(entity)
+
+      SceneLoader.ImportMeshAsync(
+        '',
+        '/',
+        component.url.substring(1),
+        scene
+      ).then((model) => {
+
+        model.meshes.forEach((mesh) => {
+          mesh.parent = transformNode
+
+          mesh.metadata = { entity }
+
+          if (component.enableOnPickTrigger) {
+            mesh.actionManager = new ActionManager(scene)
+            mesh.actionManager.registerAction(
+              new ExecuteCodeAction(
+                ActionManager.OnPickTrigger,
+                (actionEvent) => {
+                  getStore().emitEvent<OnPickTriggerEvent>({
+                    type: MeshEventType.OnPickTrigger,
+                    payload: {
+                      entity,
+                      actionEvent,
+                    },
+                  })
+                }
+              )
+            )
+          }
+        })
       })
 
-      component.ref.metadata = { entity }
+      const position = getPosition(entity)
 
-      const standardMaterial = getStandardMaterial(entity)
-
-      if (standardMaterial && standardMaterial.ref) {
-        component.ref.material = standardMaterial.ref
-      }
-
-      if (component.enableOnPickTrigger) {
-        component.ref.actionManager = new ActionManager(scene)
-        component.ref.actionManager.registerAction(
-          new ExecuteCodeAction(ActionManager.OnPickTrigger, (actionEvent) => {
-            getStore().emitEvent<OnPickTriggerEvent>({
-              type: MeshEventType.OnPickTrigger,
-              payload: {
-                entity,
-                actionEvent,
-              },
-            })
-          })
-        )
-      }
-
-      component.ref.position.x = 0
-      component.ref.position.y = 0
-      component.ref.position.z = 0
+      transformNode.position.x = position?.x ?? 0
+      transformNode.position.y = position?.y ?? 0
+      transformNode.position.z = position?.z ?? 0
     },
     remove: ({ component }) => {
       component.ref?.dispose()
