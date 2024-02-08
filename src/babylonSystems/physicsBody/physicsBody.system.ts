@@ -15,16 +15,25 @@ export const physicsBodySystem = () => {
         return
       }
 
-      const body = new BabylonPhysicsBody(
-        transformNode,
+      const mesh = scene.getMeshByName(entity) as Mesh
+
+      if (!mesh) {
+        console.log('Can not create PhysicsBody. Mesh does not exist')
+        return
+      }
+
+      const physicsBody = new BabylonPhysicsBody(
+        mesh,
         component.physicsMotionType,
         component.startsAsleep,
         scene
       )
 
-      body.setMassProperties({
-        mass: 1,
-      });
+      physicsBody.setMassProperties({
+        mass: 0,
+      })
+
+      mesh.physicsBody = physicsBody
     },
     remove: ({ entity }) => {
       const mesh = scene.getMeshByName(entity)

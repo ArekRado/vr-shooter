@@ -27,6 +27,7 @@
   "devDependencies": {
     "@babylonjs/core": "^6.2.0",
     "@babylonjs/inspector": "^6.2.0",
+    "@types/node": "^20.11.16",
     "@typescript-eslint/eslint-plugin": "^6.7.4",
     "@vitejs/plugin-react": "^4.2.0",
     "@vitest/coverage-v8": "^1.1.0",

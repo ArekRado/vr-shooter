@@ -2,8 +2,8 @@ import { createComponentCrud } from '@arekrado/canvas-engine'
 import { type MeshType, gameComponent } from '../../types'
 import { getStore } from '../../utils/store'
 
-const crud = createComponentCrud<MeshType>({
-getStore,
+const crud = createComponentCrud<MeshType, { onLoad: () => void }>({
+  getStore,
   name: gameComponent.mesh,
 })
 

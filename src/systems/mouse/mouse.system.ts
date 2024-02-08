@@ -62,7 +62,6 @@ export const mouseSystem = ({
     container.addEventListener(
       'mouseup',
       () => {
-        console.log('mouseup')
         shouldEmitEvent = true
 
         isButtonUp = true
