@@ -20,6 +20,7 @@ export default defineConfig({
   optimizeDeps: {
     exclude: ['@babylonjs/havok'],
   },
+  base: '/vr-shooter/',
   // optimiseDeps: {
   //   exclude: ['@babylonjs/havok'],
   // },
