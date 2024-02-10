@@ -21,7 +21,10 @@ cd ../vr-shooter
 echo "Copying canvas-engine to vr-shooter"
 rm -rf ./node_modules/@arekrado/canvas-engine 
 mkdir ./node_modules/@arekrado/canvas-engine 
-cp -R ../canvas-engine/dist/* ./node_modules/@arekrado/canvas-engine
+mkdir ./node_modules/@arekrado/canvas-engine/dist
+cp -R ../canvas-engine/dist/* ./node_modules/@arekrado/canvas-engine/dist
+cp -R ../canvas-engine/package.json ./node_modules/@arekrado/canvas-engine
+
 
 
 echo "Copying vector-2d to vr-shooter"
