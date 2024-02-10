@@ -27,6 +27,7 @@ export enum gameComponent {
   testingUtils = 'testingUtils',
   keyboard = 'keyboard',
   mouse = 'mouse',
+  gameControl = 'gameControl',
 
   // Babylon
   standardMaterial = 'standardMaterial',
@@ -105,6 +106,10 @@ export type KeyData = {
 export type Keyboard = {
   keys: { [key: string]: KeyData | undefined }
 }
+
+export type GameControl = {
+  
+} 
 
 // babylon components
 

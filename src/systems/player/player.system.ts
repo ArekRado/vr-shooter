@@ -18,8 +18,6 @@ export const playerSystem = () => {
     const raycastResult = new PhysicsRaycastResult()
     const length = 100
 
-    console.log(scene.pointerX, scene.pointerY)
-
     const gunPointerPosition = engine.isPointerLock
       ? [window.innerWidth / 2, window.innerHeight / 2]
       : [scene.pointerX, scene.pointerY]

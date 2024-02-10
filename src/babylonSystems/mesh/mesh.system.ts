@@ -1,6 +1,6 @@
 import { Entity } from '@arekrado/canvas-engine'
 import { type MeshType, gameComponent } from '../../types'
-import { scene } from '../../main'
+import { scene, viewer } from '../../main'
 import {
   ActionEvent,
   ActionManager,
@@ -83,8 +83,12 @@ export const meshSystem = () => {
         extraParameters.onLoad()
       })
     },
-    remove: ({ component }) => {
-      component.ref?.dispose()
+    remove: ({ entity }) => {
+      const mesh = scene.getMeshByName(entity)
+      if (mesh) {
+        viewer?.hideBody(mesh.physicsBody)
+        mesh.dispose()
+      }
     },
   })
 }

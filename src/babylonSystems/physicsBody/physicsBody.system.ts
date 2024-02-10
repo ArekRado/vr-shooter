@@ -1,5 +1,5 @@
 import { type PhysicsBody, gameComponent } from '../../types'
-import { scene } from '../../main'
+import { scene, viewer } from '../../main'
 import { Mesh, PhysicsBody as BabylonPhysicsBody } from '@babylonjs/core'
 import { getStore } from '../../utils/store'
 
@@ -37,7 +37,10 @@ export const physicsBodySystem = () => {
     },
     remove: ({ entity }) => {
       const mesh = scene.getMeshByName(entity)
-      mesh?.physicsBody?.dispose()
+      if (mesh) {
+        viewer?.hideBody(mesh.physicsBody)
+        mesh.physicsBody?.dispose()
+      }
     },
   })
 }

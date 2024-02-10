@@ -9,6 +9,8 @@ import {
   Logger,
   FreeCamera,
   HavokPlugin,
+  PhysicsViewer,
+  WebXRSessionManager,
 } from '@babylonjs/core'
 import HavokPhysics from '@babylonjs/havok'
 
@@ -35,6 +37,11 @@ import { gunPointerSystem } from './systems/gunPointer/gunPointer.system.ts'
 import { physicsShapeSystem } from './babylonSystems/physicsShape/physicsShape.system.ts'
 import { physicsBodySystem } from './babylonSystems/physicsBody/physicsBody.system.ts'
 import { transformNodeSystem } from './babylonSystems/transformNode/transformNode.system.ts'
+import {
+  gameControlEntity,
+  gameControlSystem,
+} from './systems/gameControl/gameControl.systen.ts'
+import { createGameControl } from './systems/gameControl/gameControl.crud.ts'
 
 export const canvasId = 'game'
 
@@ -43,6 +50,7 @@ if (isTestEnabled) {
 }
 
 const injectInitialState = () => {
+  createGameControl(gameControlEntity, {})
   const gunPointerEntity = generateEntity()
   getStore().createEntity(gunPointerEntity)
   gunPointerBlueprint({ entity: gunPointerEntity })
@@ -60,16 +68,16 @@ const injectInitialState = () => {
       },
     })
   })
-
-  const xr = scene.createDefaultXRExperienceAsync()
 }
 
 export let engine: Engine
 export let scene: Scene
 export let camera: FreeCamera
+export let viewer: PhysicsViewer
+export let canvas: HTMLCanvasElement
 
 const initializeBabylon = async () => {
-  const canvas = document.getElementById(canvasId) as HTMLCanvasElement
+  canvas = document.getElementById(canvasId) as HTMLCanvasElement
 
   if (!canvas && !isTestEnabled) {
     throw new Error(`Cant fird element with id ${canvasId}`)
@@ -77,9 +85,7 @@ const initializeBabylon = async () => {
 
   // Engine
   engine = isTestEnabled ? new NullEngine() : new Engine(canvas)
-  engine.enterPointerlock()
   scene = new Scene(engine)
-
   scene.performancePriority = ScenePerformancePriority.BackwardCompatible
 
   const gravityVector = new Vector3(0, -9.81, 0)
@@ -92,7 +98,7 @@ const initializeBabylon = async () => {
   if (!isTestEnabled && import.meta.env.DEV) {
     setTimeout(() => {
       import('@babylonjs/core/Debug').then(({ PhysicsViewer }) => {
-        const viewer = new PhysicsViewer(scene)
+        viewer = new PhysicsViewer(scene)
 
         for (let mesh of scene.meshes as any) {
           if (mesh.physicsBody) {
@@ -115,7 +121,6 @@ const initializeBabylon = async () => {
 
   camera = new FreeCamera('FreeCamera', new Vector3(8, 8, 16), scene)
 
-  camera.attachControl(canvas, false)
   // scene.collisionsEnabled = true
   camera.checkCollisions = true
   camera.applyGravity = true
@@ -152,6 +157,7 @@ const initializeState = async (): Promise<void> => {
   physicsShapeSystem()
 
   gridSystem()
+  gameControlSystem()
 
   mouseSystem({
     document: document,
@@ -169,6 +175,7 @@ const initializeState = async (): Promise<void> => {
   enemySystem()
 
   gunPointerSystem()
+  gameControlSystem()
 }
 
 export const initializeGame = async () => {
