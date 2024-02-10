@@ -1,1 +1,0 @@
-import{A as o,g as t,a,M as i}from"./index-WvC_7RLT.js";const r=o({getStore:t,name:a.testingUtils}),c=r.createComponent,e=i(),g=()=>{c(e,{}),window.eventsCache=[],["generateGridFromMapFinished"].forEach(n=>{t().addEventHandler(n,s=>{window.eventsCache.push(s)})}),t().createSystem({name:"testingUtils",componentName:e})};export{e as testingUtilsEntity,g as testingUtilsSystem};
