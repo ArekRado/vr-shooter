@@ -51,8 +51,6 @@ export const meshSystem = () => {
         scene
       ).then((model) => {
         model.meshes.forEach((mesh, i) => {
-          console.log(mesh)
-
           if (mesh.name === '__root__') {
             mesh.parent = transformNode
             mesh.metadata = { entity }

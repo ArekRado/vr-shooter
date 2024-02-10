@@ -61,7 +61,7 @@ const injectInitialState = () => {
     })
   })
 
-  const xr = scene.createDefaultXRExperienceAsync();
+  const xr = scene.createDefaultXRExperienceAsync()
 }
 
 export let engine: Engine
@@ -89,27 +89,27 @@ const initializeBabylon = async () => {
 
   setPointerEvents(scene)
 
-  // if (!isTestEnabled) {
-  setTimeout(() => {
-    import('@babylonjs/core/Debug').then(({ PhysicsViewer }) => {
-      const viewer = new PhysicsViewer(scene)
+  if (!isTestEnabled && import.meta.env.DEV) {
+    setTimeout(() => {
+      import('@babylonjs/core/Debug').then(({ PhysicsViewer }) => {
+        const viewer = new PhysicsViewer(scene)
 
-      for (let mesh of scene.meshes as any) {
-        if (mesh.physicsBody) {
-          viewer.showBody(mesh.physicsBody)
-        } else if (mesh.physicsImpostor) {
-          viewer.showImpostor(mesh.physicsImpostor, mesh)
+        for (let mesh of scene.meshes as any) {
+          if (mesh.physicsBody) {
+            viewer.showBody(mesh.physicsBody)
+          } else if (mesh.physicsImpostor) {
+            viewer.showImpostor(mesh.physicsImpostor, mesh)
+          }
         }
-      }
-    })
-  }, 500)
+      })
+    }, 500)
 
-  import('@babylonjs/inspector').then(({ Inspector }) => {
-    Inspector.Show(scene, {
-      embedMode: true,
-    })
-  })
-  // }
+    // import('@babylonjs/inspector').then(({ Inspector }) => {
+    //   Inspector.Show(scene, {
+    //     embedMode: true,
+    //   })
+    // })
+  }
   // scene.gravity = new Vector3(0, -0.9, 0)
   // scene.collisionsEnabled = true
 

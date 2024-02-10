@@ -9,6 +9,7 @@ declare module '*.css'
 interface ImportMeta {
   readonly env: {
     MODE: 'development' | 'test' | 'production'
+    DEV: boolean
   }
 }
 

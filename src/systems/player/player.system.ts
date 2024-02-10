@@ -2,50 +2,39 @@ import {
   PhysicsEngine,
   PhysicsRaycastResult,
   Ray,
-  RayHelper,
   Vector3,
 } from '@babylonjs/core'
-import { camera, scene } from '../../main'
+import { camera, engine, scene } from '../../main'
 import { type Player, gameComponent } from '../../types'
 import { OnPointerDownEvent } from '../../utils/pointerEvents'
 import { getStore } from '../../utils/store'
-import { getEnemy, removeEnemy } from '../enemy/ememy.crud'
 import { killEnemy } from '../enemy/killEnemy'
 
 export const playerSystem = () => {
   getStore().addEventHandler<OnPointerDownEvent>('OnPointerDown', (event) => {
     if (event.payload.pointerInfo.event.button !== 0) return
-    const origin = camera.position
 
-    // let viewer = new BABYLON.Debug.PhysicsViewer(scene);
-    // for (let mesh of scene.meshes) {
-    //     if (mesh.physicsBody) {
-    //         viewer.showBody(mesh.physicsBody);
-    //     }
-    // }
-
-    const forward = Vector3.TransformCoordinates(
-      new Vector3(0, 0, 1),
-      camera.getWorldMatrix()
-    )
-
-    const direction = Vector3.Normalize(forward.subtract(origin))
-
-    var pickingRay = new Ray(new Vector3(0, 0, 0), new Vector3(0, 1, 0))
-    var raycastResult = new PhysicsRaycastResult()
+    const pickingRay = new Ray(new Vector3(0, 0, 0), new Vector3(0, 1, 0))
+    const raycastResult = new PhysicsRaycastResult()
     const length = 100
 
+    console.log(scene.pointerX, scene.pointerY)
+
+    const gunPointerPosition = engine.isPointerLock
+      ? [window.innerWidth / 2, window.innerHeight / 2]
+      : [scene.pointerX, scene.pointerY]
+
     scene.createPickingRayToRef(
-      scene.pointerX,
-      scene.pointerY,
+      gunPointerPosition[0],
+      gunPointerPosition[1],
       null,
       pickingRay,
       camera
     )
-    var rayHelper = new RayHelper(pickingRay);
-    rayHelper.show(scene);
+    // const rayHelper = new RayHelper(pickingRay)
+    // rayHelper.show(scene)
 
-    var physEngine = scene.getPhysicsEngine() as PhysicsEngine
+    const physEngine = scene.getPhysicsEngine() as PhysicsEngine
 
     if (!physEngine) return
 
@@ -54,29 +43,10 @@ export const playerSystem = () => {
       pickingRay.origin.add(pickingRay.direction.scale(length)),
       raycastResult
     )
-    const hit = raycastResult.hasHit
-    const hitPos = raycastResult.hitPointWorld
 
-    // const length = 100
-    // const ray = new Ray(origin, direction, length)
-
-    // const hit = scene.pickWithRay(ray, (mesh) => {
-    //   const entity = mesh?.metadata?.entity
-
-    //   if (entity) {
-    //     const enemy = getEnemy(entity)
-    //     return Boolean(enemy)
-    //   }
-
-    //   return false
-    // })
-
-    console.log(hit)
-
-    // if (hit?.hit) {
-    //   const enemyEntity = hit.pickedMesh?.metadata.entity
-    //   killEnemy(enemyEntity)
-    // }
+    if (raycastResult.body?.transformNode.metadata.entity) {
+      killEnemy(raycastResult.body?.transformNode.metadata.entity)
+    }
   })
 
   getStore().createSystem<Player>({
