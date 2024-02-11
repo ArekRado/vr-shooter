@@ -1,7 +1,6 @@
 import { Entity } from '@arekrado/canvas-engine'
 import { createEnemy } from './ememy.crud'
 import { Enemy, Health, Position } from '../../types'
-import { createPosition } from '../position/position.crud'
 import { createHealth } from '../health.crud'
 
 import characterUrl from '../../assets/models/character.glb'
@@ -22,7 +21,6 @@ export const enemyBlueprint = ({
   position: Position
   health?: Partial<Health>
 }) => {
-  createPosition(entity, position)
   createTransformNode(entity, { position })
   createHealth(entity, {
     health: health?.health ?? 1,
@@ -32,10 +30,9 @@ export const enemyBlueprint = ({
   createMesh(
     entity,
     {
-      ref: undefined,
       enableOnPickTrigger: false,
       name: entity,
-      url: characterUrl,
+      url: 'character.glb',
     },
     {
       onLoad: () => {

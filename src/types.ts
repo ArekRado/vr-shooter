@@ -119,7 +119,6 @@ export type StandardMaterialType = {
 }
 
 export type MeshType = {
-  ref?: Mesh
   name: string
   url: string
   enableOnPickTrigger?: boolean

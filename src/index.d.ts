@@ -2,6 +2,7 @@ declare module '*.jpg'
 declare module '*.png'
 declare module '*.obj'
 declare module '*.glb'
+declare module '*.gltf'
 declare module '*.babylon'
 
 declare module '*.css'

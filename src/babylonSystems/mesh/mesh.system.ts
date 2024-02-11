@@ -8,9 +8,9 @@ import {
   SceneLoader,
 } from '@babylonjs/core'
 import { getStore } from '../../utils/store'
-import { getPosition } from '../../systems/position/position.crud'
 
 import '@babylonjs/loaders/glTF'
+import '@babylonjs/loaders/OBJ/objFileLoader';
 
 export enum MeshEventType {
   OnPickTrigger = 'OnPickTrigger',
@@ -38,23 +38,17 @@ export const meshSystem = () => {
         return
       }
 
-      const position = getPosition(entity)
-
-      transformNode.position.x = position?.x ?? 0
-      transformNode.position.y = position?.y ?? 0
-      transformNode.position.z = position?.z ?? 0
-
       SceneLoader.ImportMeshAsync(
         '',
-        '/',
-        component.url.substring(1),
+        '/vr-shooter/models/',
+         component.url,
         scene
       ).then((model) => {
         model.meshes.forEach((mesh, i) => {
-          if (mesh.name === '__root__') {
-            mesh.parent = transformNode
-            mesh.metadata = { entity }
+          mesh.parent = transformNode
 
+          if (mesh.name === '__root__') {
+            mesh.metadata = { entity }
             return
           }
 

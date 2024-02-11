@@ -20,7 +20,6 @@ import { standardMaterialSystem } from './babylonSystems/standardMaterial/standa
 import { State } from './types'
 import { setPointerEvents } from './utils/pointerEvents.ts'
 
-import { mapBlueprint } from './systems/map/map.blueprint.ts'
 import { skyboxBlueprint } from './systems/skybox/skybox.blueprint.ts'
 import { isTestEnabled } from './utils/isTestEnabled.ts'
 
@@ -40,8 +39,9 @@ import { transformNodeSystem } from './babylonSystems/transformNode/transformNod
 import {
   gameControlEntity,
   gameControlSystem,
-} from './systems/gameControl/gameControl.systen.ts'
+} from './systems/gameControl/gameControl.systenm.ts'
 import { createGameControl } from './systems/gameControl/gameControl.crud.ts'
+import { loadAllMeshesh } from './systems/loadAllMeshesh.ts'
 
 export const canvasId = 'game'
 
@@ -68,6 +68,8 @@ const injectInitialState = () => {
       },
     })
   })
+
+  loadAllMeshesh()
 }
 
 export let engine: Engine
@@ -110,11 +112,11 @@ const initializeBabylon = async () => {
       })
     }, 500)
 
-    // import('@babylonjs/inspector').then(({ Inspector }) => {
-    //   Inspector.Show(scene, {
-    //     embedMode: true,
-    //   })
-    // })
+    import('@babylonjs/inspector').then(({ Inspector }) => {
+      Inspector.Show(scene, {
+        embedMode: true,
+      })
+    })
   }
   // scene.gravity = new Vector3(0, -0.9, 0)
   // scene.collisionsEnabled = true
@@ -168,7 +170,6 @@ const initializeState = async (): Promise<void> => {
     containerId: canvasId,
   })
 
-  mapBlueprint()
   skyboxBlueprint()
 
   playerSystem()

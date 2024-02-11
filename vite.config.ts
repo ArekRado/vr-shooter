@@ -16,7 +16,7 @@ export default defineConfig({
       typescript: true,
     }),
   ],
-  assetsInclude: ['**/*.glb'],
+  assetsInclude: ['**/*.glb', '**/*.obj', '**/*.gltf'],
   optimizeDeps: {
     exclude: ['@babylonjs/havok'],
   },
